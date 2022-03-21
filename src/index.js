@@ -40,7 +40,7 @@ app.get("/confrimation/:token", async (req, res) => {
         .lean()
         .exec()
 
-      RedisClient.get(`User.${user.user._id}`, async (err, fetchedPost) => {
+      redis.get(`User.${user.user._id}`, async (err, fetchedPost) => {
         if (err) console.log(err.message)
 
         redis.set(`User.${user.user._id}`, JSON.stringify(user.user))
