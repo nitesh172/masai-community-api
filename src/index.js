@@ -13,7 +13,9 @@ app.set("view engine", "ejs")
 app.use(express.urlencoded({ extended: true }))
 
 const userController = require("./Controllers/user.controller")
-const { register, login } = require("./Controllers/auth.controller")
+const { register, login, verifyToken } = require("./Controllers/auth.controller")
+const userModel = require("./Models/user.model")
+const redis = require("./Configs/redis")
 
 app.use("/users", userController)
 app.post("/register", register)
@@ -28,7 +30,7 @@ app.get("/confrimation/:token", async (req, res) => {
     user.user.confirmed = true
 
     try {
-      const updatedUser = await User.findByIdAndUpdate(
+      const updatedUser = await userModel.findByIdAndUpdate(
         user.user._id,
         user.user,
         {
@@ -38,7 +40,7 @@ app.get("/confrimation/:token", async (req, res) => {
         .lean()
         .exec()
 
-      redis.get(`User.${user.user._id}`, async (err, fetchedPost) => {
+      RedisClient.get(`User.${user.user._id}`, async (err, fetchedPost) => {
         if (err) console.log(err.message)
 
         redis.set(`User.${user.user._id}`, JSON.stringify(user.user))
