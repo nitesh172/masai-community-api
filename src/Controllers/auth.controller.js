@@ -9,20 +9,16 @@ const User = require("../Models/user.model")
 const newToken = (user) => {
   return jwt.sign(
     { user: user },
-    "gsfgsfgduskjghskjhgsduagseuiwahgwiesuytuiyshwtuwyuwhnfiojjw"
+    process.env.sign
   )
 }
 
 const verifyToken = (token) => {
   return new Promise((resolve, reject) => {
-    jwt.verify(
-      token,
-      "gsfgsfgduskjghskjhgsduagseuiwahgwiesuytuiyshwtuwyuwhnfiojjw",
-      function (err, decoded) {
-        if (err) return reject(err)
-        resolve(decoded)
-      }
-    )
+    jwt.verify(token, process.env.sign, function (err, decoded) {
+      if (err) return reject(err)
+      resolve(decoded)
+    })
   })
 }
 
@@ -42,7 +38,7 @@ const register = async (req, res) => {
     const url = `https://masai-community.herokuapp.com/confrimation/${token}`
 
     const mailOptions = {
-      from: "communitymasai@gmail.com", // sender address
+      from: process.env.user, // sender address
       to: req.body.email, // list of receivers
       subject: "Confirm your gmail", // Subject line
       html: `${emailCode(url)}`, // plain text body
