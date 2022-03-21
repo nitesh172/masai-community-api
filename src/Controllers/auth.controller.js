@@ -17,7 +17,7 @@ const verifyToken = (token) => {
   return new Promise((resolve, reject) => {
     jwt.verify(
       token,
-      "gsfgsfgduskjghskjhgsduagseuiwahgwiesuytuiyshwtuwyuwhnfiow",
+      "gsfgsfgduskjghskjhgsduagseuiwahgwiesuytuiyshwtuwyuwhnfiojjw",
       function (err, decoded) {
         if (err) return reject(err)
         resolve(decoded)
