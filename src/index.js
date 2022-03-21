@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }))
 
 const userController = require("./Controllers/user.controller")
 const { register, login, verifyToken } = require("./Controllers/auth.controller")
-const userModel = require("./Models/user.model")
+const User = require("./Models/user.model")
 const redis = require("./Configs/redis")
 
 app.use("/users", userController)
