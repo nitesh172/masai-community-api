@@ -30,7 +30,7 @@ app.get("/confrimation/:token", async (req, res) => {
     user.user.confirmed = true
 
     try {
-      const updatedUser = await userModel.findByIdAndUpdate(
+      const updatedUser = await User.findByIdAndUpdate(
         user.user._id,
         user.user,
         {
