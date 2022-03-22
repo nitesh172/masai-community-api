@@ -16,7 +16,7 @@ var userSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
-    mobile: {
+    phone: {
       type: Number,
       required: false,
     },
