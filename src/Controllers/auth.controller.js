@@ -5,12 +5,10 @@ const redis = require("../Configs/redis")
 const emailCode = require("../Configs/emailCode")
 const transporter = require("../Configs/email")
 const User = require("../Models/user.model")
+const redis = require("../Configs/redis")
 
 const newToken = (user) => {
-  return jwt.sign(
-    { user: user },
-    process.env.sign
-  )
+  return jwt.sign({ user: user }, process.env.sign)
 }
 
 const verifyToken = (token) => {
@@ -92,4 +90,63 @@ const login = async (req, res) => {
   }
 }
 
-module.exports = { register, login, verifyToken, newToken }
+const confirmUser = async (req, res) => {
+  try {
+    const user = await verifyToken(req.params.token)
+
+    if (!user) return res.status(402).send({ message: "invalid token" })
+
+    user.user.confirmed = true
+
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        user.user._id,
+        user.user,
+        {
+          new: true,
+        }
+      )
+        .lean()
+        .exec()
+
+      redis.get(`User.${user.user._id}`, async (err, fetchedPost) => {
+        if (err) console.log(err.message)
+
+        redis.set(`User.${user.user._id}`, JSON.stringify(user.user))
+
+        const users = await User.find().lean().exec()
+        redis.set(`User`, JSON.stringify(users))
+      })
+
+      res.status(200).redirect("http://localhost:3000/verifyEmail")
+    } catch (error) {
+      console.log(error.message)
+      res.status(500).send(error.message)
+    }
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).send(error.message)
+  }
+}
+
+const profile = async (req, res) => {
+  try {
+    const user = await verifyToken(req.params.token)
+
+    if (!user) return res.status(402).send({ message: "invalid token" })
+
+    return res.status(200).send(user.user)
+  } catch (error) {
+    console.log(error.message)
+    return res.status(500).send(error.message)
+  }
+}
+
+module.exports = {
+  register,
+  login,
+  verifyToken,
+  newToken,
+  confirmUser,
+  profile,
+}
