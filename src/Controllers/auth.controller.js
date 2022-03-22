@@ -81,7 +81,7 @@ const login = async (req, res) => {
     if (!match) return res.status(401).send({ message: "Password Invalid" })
 
     if (!user.confirmed)
-      return res.status(401).send({ message: "First verify your Email" })
+      return res.status(403).send({ message: "First verify your Email" })
 
     const token = newToken(user)
 
