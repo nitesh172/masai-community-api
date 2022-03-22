@@ -9,7 +9,7 @@ var userSchema = new mongoose.Schema(
     },
     username: {
       type: String,
-      required: false,
+      required: true,
     },
     email: {
       type: String,
@@ -27,19 +27,19 @@ var userSchema = new mongoose.Schema(
     },
     joined: {
       type: String,
-      required: true,
+      required: false,
     },
     dob: {
       type: String,
-      required: true,
+      required: false,
     },
     batch: {
       type: String,
-      required: true,
+      required: false,
     },
     bio: {
       type: String,
-      required: true,
+      required: false,
     },
     profilePic: {
       type: String,
@@ -48,15 +48,15 @@ var userSchema = new mongoose.Schema(
     },
     place: {
       type: String,
-      required: true,
+      required: false,
     },
     follower: {
       type: Array,
-      required: true,
+      required: false,
     },
     following: {
       type: Array,
-      required: true,
+      required: false,
     },
     Status: {
       type: String,
