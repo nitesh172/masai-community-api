@@ -56,7 +56,7 @@ const register = async (req, res) => {
         value = JSON.parse(value)
         redis.set(`User`, JSON.stringify([...value, user]))
       } else {
-        value = await model.find().lean().exec()
+        value = await User.find().lean().exec()
         redis.set(`User`, JSON.stringify(value))
       }
     })
