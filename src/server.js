@@ -2,6 +2,7 @@ const app = require("./index")
 
 const port = process.env.PORT || 2001
 const connection = require("./Configs/db")
+const eventEmitter = require('./index')
 
 const server = app.listen(port, async () => {
   try {
@@ -22,4 +23,8 @@ io.on("connection", (socket) => {
   })
 })
 
-module.exports = io
+eventEmitter.on("userConfirmed", (data) => {
+  console.log(data._id)
+  io.to(`user_${data._id}`).emit("userConfirmed", data)
+  console.log("success")
+})
