@@ -20,7 +20,7 @@ const io = require("socket.io")(server)
 //   // socket.on("registerSucessfull", (userId) => {
 //   //   socket.join(userId)
 //   // })
-})
+// })
 
 // eventEmitter.on("userConfirmed", (data) => {
 //   io.to(`user_${data._id}`).emit("userConfirmed", data)
