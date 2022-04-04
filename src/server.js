@@ -2,7 +2,7 @@ const app = require("./index")
 
 const port = process.env.PORT || 2001
 const connection = require("./Configs/db")
-const eventEmitter = require('./index')
+const eventEmitter = app.get("eventEmitter")
 
 const server = app.listen(port, async () => {
   try {
