@@ -1,13 +1,13 @@
 const express = require("express")
-// const Emitter = require("events")
+const Emitter = require("events")
 
 const app = express()
 
 const cors = require("cors")
 
-// const eventEmitter = new Emitter()
+const eventEmitter = new Emitter()
 
-// app.set("eventEmitter", eventEmitter)
+app.set("eventEmitter", eventEmitter)
 
 app.use(express.json())
 
@@ -32,5 +32,5 @@ app.post("/login", login)
 app.get("/confrimation/:token", confirmUser)
 app.get("/profile/:token", profile)
 
-// module.exports = eventEmitter
+module.exports = eventEmitter
 module.exports = app

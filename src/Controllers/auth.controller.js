@@ -116,9 +116,9 @@ const confirmUser = async (req, res) => {
         const users = await User.find().lean().exec()
         redis.set(`User`, JSON.stringify(users))
       })
-      // const eventEmitter = req.app.get("eventEmitter")
+      const eventEmitter = req.app.get("eventEmitter")
 
-      // eventEmitter.emit('userConfirmed', updatedUser)
+      eventEmitter.emit('userConfirmed', updatedUser)
       res.status(200).redirect("http://localhost:3000/verifyEmail")
     } catch (error) {
       console.log(error.message)
