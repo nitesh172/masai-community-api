@@ -19,9 +19,12 @@ app.set("view engine", "ejs")
 app.use(express.urlencoded({ extended: true }))
 
 const userController = require("./Controllers/user.controller")
-const { register, login, verifyToken } = require("./Controllers/auth.controller")
-const User = require("./Models/user.model")
-const redis = require("./Configs/redis")
+const {
+  register,
+  login,
+  confirmUser,
+  profile
+} = require("./Controllers/auth.controller")
 
 app.use("/users", userController)
 app.post("/register", register)
@@ -29,6 +32,7 @@ app.post("/login", login)
 
 app.get("/confrimation/:token", confirmUser)
 app.get("/profile/:token", profile)
+
 eventEmitter.on("userConfirmed", (data) => {
   io.to(`user_${data._id}`).emit("userConfirmed", data)
 })
