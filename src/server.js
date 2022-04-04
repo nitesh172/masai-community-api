@@ -2,7 +2,6 @@ const app = require("./index")
 
 const port = process.env.PORT || 2001
 const connection = require("./Configs/db")
-const eventEmitter = require('./index')
 
 const server = app.listen(port, async () => {
   try {
@@ -16,12 +15,11 @@ const server = app.listen(port, async () => {
 const io = require("socket.io")(server)
 
 io.on("connection", (socket) => {
-  console.log("connected")
+  console.log(socket.id)
   socket.on("registerSucessfull", (userId) => {
+    console.log(userId)
     socket.join(userId)
   })
 })
 
-eventEmitter.on("userConfirmed", (data) => {
-  io.to(`user_${data._id}`).emit("userConfirmed", data)
-})
+module.exports = io
