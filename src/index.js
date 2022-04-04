@@ -1,5 +1,5 @@
 const express = require("express")
-const Emitter = require('events')
+const Emitter = require("events")
 const io = require("./server")
 
 const app = express()
@@ -8,7 +8,7 @@ const cors = require("cors")
 
 const eventEmitter = new Emitter()
 
-app.set('eventEmitter', eventEmitter)
+app.set("eventEmitter", eventEmitter)
 
 app.use(express.json())
 
@@ -23,7 +23,7 @@ const {
   register,
   login,
   confirmUser,
-  profile
+  profile,
 } = require("./Controllers/auth.controller")
 
 app.use("/users", userController)
@@ -33,6 +33,7 @@ app.post("/login", login)
 app.get("/confrimation/:token", confirmUser)
 app.get("/profile/:token", profile)
 
+console.log(io)
 eventEmitter.on("userConfirmed", (data) => {
   io.to(`user_${data._id}`).emit("userConfirmed", data)
 })
