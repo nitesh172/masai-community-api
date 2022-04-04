@@ -5,7 +5,6 @@ const redis = require("../Configs/redis")
 const emailCode = require("../Configs/emailCode")
 const transporter = require("../Configs/email")
 const User = require("../Models/user.model")
-const redis = require("../Configs/redis")
 
 const newToken = (user) => {
   return jwt.sign({ user: user }, process.env.sign)
