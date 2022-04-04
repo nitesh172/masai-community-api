@@ -1,6 +1,5 @@
 const express = require("express")
 const Emitter = require("events")
-const io = require('./server')
 
 const app = express()
 
@@ -33,10 +32,6 @@ app.post("/login", login)
 app.get("/confrimation/:token", confirmUser)
 app.get("/profile/:token", profile)
 
-eventEmitter.on("userConfirmed", (data) => {
-  console.log(data._id)
-  io.to(`user_${data._id}`).emit("userConfirmed", data)
-  console.log("success")
-})
 
+module.exports = eventEmitter
 module.exports = app
