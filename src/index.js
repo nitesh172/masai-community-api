@@ -33,5 +33,4 @@ app.get("/confrimation/:token", confirmUser)
 app.get("/profile/:token", profile)
 
 
-module.exports = eventEmitter
 module.exports = app
