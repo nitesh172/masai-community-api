@@ -34,7 +34,9 @@ app.get("/confrimation/:token", confirmUser)
 app.get("/profile/:token", profile)
 
 eventEmitter.on("userConfirmed", (data) => {
+  console.log(data._id)
   io.to(`user_${data._id}`).emit("userConfirmed", data)
+  console.log("success")
 })
 
 module.exports = app
