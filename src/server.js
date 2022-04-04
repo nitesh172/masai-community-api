@@ -15,11 +15,11 @@ const server = app.listen(port, async () => {
 
 const io = require("socket.io")(server)
 
-io.on("connection", (socket) => {
-  console.log("connected")
-  // socket.on("registerSucessfull", (userId) => {
-  //   socket.join(userId)
-  // })
+// io.on("connection", (socket) => {
+//   console.log("connected")
+//   // socket.on("registerSucessfull", (userId) => {
+//   //   socket.join(userId)
+//   // })
 })
 
 // eventEmitter.on("userConfirmed", (data) => {
