@@ -11,7 +11,6 @@ const server = app.listen(port, async () => {
     console.log(error.message)
   }
 })
-//
 
 const io = require("socket.io")(server)
 

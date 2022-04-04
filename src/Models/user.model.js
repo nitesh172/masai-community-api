@@ -16,11 +16,6 @@ var userSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
-    mobile: {
-      type: Number,
-      unique: true,
-      required: false,
-    },
     password: {
       type: String,
       required: true,
@@ -82,6 +77,11 @@ var userSchema = new mongoose.Schema(
       required: false,
       default: false,
     },
+    detailFilled: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
   },
   {
     versionKey: false,

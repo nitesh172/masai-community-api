@@ -7,12 +7,8 @@ const transporter = require("../Configs/email")
 const User = require("../Models/user.model")
 const redis = require("../Configs/redis")
 
-
 const newToken = (user) => {
-  return jwt.sign(
-    { user: user },
-    process.env.sign
-  )
+  return jwt.sign({ user: user }, process.env.sign)
 }
 
 const verifyToken = (token) => {
@@ -83,7 +79,7 @@ const login = async (req, res) => {
     if (!match) return res.status(401).send({ message: "Password Invalid" })
 
     if (!user.confirmed)
-      return res.status(401).send({ message: "First verify your Email" })
+      return res.status(403).send({ message: "First verify your Email" })
 
     const token = newToken(user)
 
@@ -121,11 +117,9 @@ const confirmUser = async (req, res) => {
         const users = await User.find().lean().exec()
         redis.set(`User`, JSON.stringify(users))
       })
-
       const eventEmitter = req.app.get("eventEmitter")
 
       eventEmitter.emit('userConfirmed', updatedUser)
-
       res.status(200).redirect("http://localhost:3000/verifyEmail")
     } catch (error) {
       console.log(error.message)
