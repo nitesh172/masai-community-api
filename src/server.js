@@ -21,7 +21,3 @@ io.on("connection", (socket) => {
     socket.join(userId)
   })
 })
-
-eventEmitter.on("userConfirmed", (data) => {
-  io.to(`user_${data._id}`).emit("userConfirmed", data)
-})
