@@ -38,7 +38,7 @@ const register = async (req, res) => {
       from: process.env.user, // sender address
       to: req.body.email, // list of receivers
       subject: "Confirm your gmail", // Subject line
-      html: `${emailCode(url)}`, // plain text body
+      html: `${emailCode(url, user.username)}`, // plain text body
     }
 
     transporter.sendMail(mailOptions, function (err, info) {
@@ -116,10 +116,15 @@ const confirmUser = async (req, res) => {
         const users = await User.find().lean().exec()
         redis.set(`User`, JSON.stringify(users))
       })
+      
+      res.status(200).render("confirmmail.ejs", {
+        updatedUser,
+        message: "Verification Sucessfull",
+      })
+
       const eventEmitter = req.app.get("eventEmitter")
 
-      eventEmitter.emit('userConfirmed', updatedUser)
-      res.status(200).redirect("http://localhost:3000/verifyEmail")
+      eventEmitter.emit("userConfirmed", updatedUser)
     } catch (error) {
       console.log(error.message)
       res.status(500).send(error.message)
