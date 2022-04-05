@@ -117,14 +117,14 @@ const confirmUser = async (req, res) => {
         redis.set(`User`, JSON.stringify(users))
       })
       
+      const eventEmitter = req.app.get("eventEmitter")
+
+      eventEmitter.emit("userConfirmed", updatedUser)
+
       res.status(200).render("confirmmail.ejs", {
         updatedUser,
         message: "Verification Sucessfull",
       })
-
-      const eventEmitter = req.app.get("eventEmitter")
-
-      eventEmitter.emit("userConfirmed", updatedUser)
     } catch (error) {
       console.log(error.message)
       res.status(500).send(error.message)
