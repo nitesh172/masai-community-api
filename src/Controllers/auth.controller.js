@@ -78,10 +78,10 @@ const login = async (req, res) => {
     if (!match) return res.status(401).send({ message: "Password Invalid" })
 
     if (!user.confirmed)
-      return res.status(403).send({ message: "First verify your Email" })
+      return res.status(200).send({ message: "First verify your Email" })
 
     if (!user.detailFilled)
-      return res.status(403).send({ message: "Update Your Profile" })
+      return res.status(200).send({ message: "Update Your Profile" })
 
     const token = newToken(user)
 
@@ -138,6 +138,55 @@ const confirmUser = async (req, res) => {
   }
 }
 
+const updateUserDetails = async (req, res) => {
+  try {
+
+    let user = await User.findById(req.params.id).lean().exec()
+
+    if (!user) return res.status(401).send({ message: "User not Found" })
+
+    user.place = req.body.place
+    user.role = req.body.role
+    user.bio = req.body.bio
+    user.batch = req.body.batch
+    user.dob = req.body.dob
+    user.joined = req.body.joined
+    user.name = req.body.name
+    user.Status = "Active"
+    user.detailFilled = true
+
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        user._id,
+        user,
+        {
+          new: true,
+        }
+      )
+
+      redis.get(`User.${user.user._id}`, async (err, fetchedPost) => {
+        if (err) console.log(err.message)
+
+        redis.set(`User.${user.user._id}`, JSON.stringify(user.user))
+
+        const users = await User.find().lean().exec()
+        redis.set(`User`, JSON.stringify(users))
+      })
+
+      const eventEmitter = req.app.get("eventEmitter")
+
+      eventEmitter.emit("userUpdated", updatedUser)
+
+    } catch (error) {
+      console.log(error.message)
+      res.status(500).send(error.message)
+    }
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).send(error.message)
+  }
+}
+
 const profile = async (req, res) => {
   try {
     const user = await verifyToken(req.params.token)
@@ -158,4 +207,5 @@ module.exports = {
   newToken,
   confirmUser,
   profile,
+  updateUserDetails,
 }

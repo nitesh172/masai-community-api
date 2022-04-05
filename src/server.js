@@ -28,3 +28,9 @@ eventEmitter.on("userConfirmed", (data) => {
   io.to(`user_${data._id}`).emit("userConfirmed", data)
   console.log("success")
 })
+
+eventEmitter.on("userUpdated", (data) => {
+  console.log(data._id)
+  io.to(`user_${data._id}`).emit("userUpdated", data)
+  console.log("success")
+})

@@ -41,6 +41,10 @@ var userSchema = new mongoose.Schema(
       required: false,
       default: "https://i.postimg.cc/MTw0t80t/pngegg-1.png",
     },
+    role:{
+      type: String,
+      required: false
+    },
     place: {
       type: String,
       required: false,
