@@ -119,7 +119,7 @@ const confirmUser = async (req, res) => {
         const users = await User.find().lean().exec()
         redis.set(`User`, JSON.stringify(users))
       })
-      
+
       const eventEmitter = req.app.get("eventEmitter")
 
       eventEmitter.emit("userConfirmed", updatedUser)
@@ -140,25 +140,24 @@ const confirmUser = async (req, res) => {
 
 const updateUserDetails = async (req, res) => {
   try {
+    const user = await verifyToken(req.params.token)
 
-    let user = await User.findById(req.params.id).lean().exec()
+    if (!user) return res.status(402).send({ message: "invalid token" })
 
-    if (!user) return res.status(401).send({ message: "User not Found" })
-
-    user.place = req.body.place
-    user.role = req.body.role
-    user.bio = req.body.bio
-    user.batch = req.body.batch
-    user.dob = req.body.dob
-    user.joined = req.body.joined
-    user.name = req.body.name
-    user.Status = "Active"
-    user.detailFilled = true
+    user.user.place = req.body.place
+    user.user.role = req.body.role
+    user.user.bio = req.body.bio
+    user.user.batch = req.body.batch
+    user.user.dob = req.body.dob
+    user.user.joined = req.body.joined
+    user.user.name = req.body.name
+    user.user.Status = "Active"
+    user.user.detailFilled = true
 
     try {
       const updatedUser = await User.findByIdAndUpdate(
-        user._id,
-        user,
+        user.user._id,
+        user.user,
         {
           new: true,
         }
@@ -176,7 +175,6 @@ const updateUserDetails = async (req, res) => {
       const eventEmitter = req.app.get("eventEmitter")
 
       eventEmitter.emit("userUpdated", updatedUser)
-
     } catch (error) {
       console.log(error.message)
       res.status(500).send(error.message)
