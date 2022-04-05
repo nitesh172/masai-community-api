@@ -31,7 +31,7 @@ app.post("/register", register)
 app.post("/login", login)
 
 app.get("/confrimation/:token", confirmUser)
-app.post("/userUpdateDetails/:id", updateUserDetails)
+app.post("/userUpdateDetails/:token", updateUserDetails)
 app.get("/profile/:token", profile)
 
 
