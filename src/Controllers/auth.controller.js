@@ -80,6 +80,9 @@ const login = async (req, res) => {
     if (!user.confirmed)
       return res.status(403).send({ message: "First verify your Email" })
 
+    if (!user.detailFilled)
+      return res.status(403).send({ message: "Update Your Profile" })
+
     const token = newToken(user)
 
     return res.status(201).send({ user, token, message: "Login sucessfull" })
